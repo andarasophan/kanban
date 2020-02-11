@@ -6,6 +6,12 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       // associations can be defined here
+      User.hasMany(models.Task, {
+        foreignKey: 'id'
+      })
+      User.hasMany(models.Category, {
+        foreignKey: 'id'
+      })
     }
   }
   User.init({
