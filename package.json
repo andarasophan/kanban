@@ -4,7 +4,8 @@
   "description": "Nama database wajib: kanban-beta-fox",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "NODE_ENV=development nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,10 @@
   "homepage": "https://github.com/andarasophan/kanban#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "google-auth-library": "^5.9.2",
+    "jsonwebtoken": "^8.5.1",
     "pg": "^7.18.1",
     "sequelize": "^5.21.4"
   }

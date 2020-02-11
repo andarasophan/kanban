@@ -22,11 +22,6 @@ class Controller {
                 }
                 let token = generateToken(payload);
                 res.status(201).json({
-                    first_name: user.first_name,
-                    last_name: user.last_name,
-                    id: user.id,
-                    email: user.email,
-                    password: user.password,
                     accessToken: token
                 });
             })
@@ -52,7 +47,6 @@ class Controller {
                         }
                         let token = generateToken(payload);
                         res.status(200).json({
-                            payload,
                             accessToken: token
                         })
                     } else {
@@ -105,7 +99,6 @@ class Controller {
                     }
                     let token = generateToken(payload);
                     res.status(200).json({
-                        payload,
                         accessToken: token
                     })
                 } else {
@@ -127,7 +120,6 @@ class Controller {
                             }
                             let token = generateToken(payload);
                             res.status(200).json({
-                                payload,
                                 accessToken: token
                             })
                         })
