@@ -12,7 +12,19 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Task.init({
-    title: DataTypes.STRING,
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isInvalid(value, next) {
+          if (value === null || value === '') {
+            next('Title is required');
+          } else {
+            next();
+          }
+        }
+      }
+    },
     description: DataTypes.STRING,
     due_date: DataTypes.DATE,
     user_id: DataTypes.INTEGER,

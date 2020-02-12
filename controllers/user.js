@@ -22,7 +22,7 @@ class Controller {
                 }
                 let token = generateToken(payload);
                 res.status(201).json({
-                    accessToken: token
+                    token: token
                 });
             })
             .catch(err => {
@@ -47,7 +47,7 @@ class Controller {
                         }
                         let token = generateToken(payload);
                         res.status(200).json({
-                            accessToken: token
+                            token: token
                         })
                     } else {
                         next({
@@ -99,7 +99,7 @@ class Controller {
                     }
                     let token = generateToken(payload);
                     res.status(200).json({
-                        accessToken: token
+                        token: token
                     })
                 } else {
                     let newUser = {
@@ -120,7 +120,7 @@ class Controller {
                             }
                             let token = generateToken(payload);
                             res.status(200).json({
-                                accessToken: token
+                                token: token
                             })
                         })
                         .catch(err => {

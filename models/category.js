@@ -12,8 +12,32 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Category.init({
-    name: DataTypes.STRING,
-    user_id: DataTypes.INTEGER
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isInvalid(value, next) {
+          if (value === null || value === '') {
+            next('Name is required');
+          } else {
+            next();
+          }
+        }
+      }
+    },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        isInvalid(value, next) {
+          if (value === null || value === '') {
+            next('User id is required');
+          } else {
+            next();
+          }
+        }
+      }
+    }
   }, { sequelize })
   return Category;
 };

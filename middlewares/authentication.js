@@ -2,9 +2,9 @@ const { verifyToken } = require('../helpers/jwt')
 const { User } = require('../models/index')
 
 const authentication = (req, res, next) => {
-    if (req.headers.access_token) {
+    if (req.headers.token) {
         try {
-            let decoded = verifyToken(req.headers.access_token);
+            let decoded = verifyToken(req.headers.token);
             User.findOne({
                 where: {
                     id: decoded.id
@@ -17,8 +17,7 @@ const authentication = (req, res, next) => {
                     } else {
                         next({
                             status: 401,
-                            message: 'Unauthorized',
-                            type: 'Login first'
+                            message: 'Unauthorized'
                         })
                     }
                 })
@@ -28,15 +27,13 @@ const authentication = (req, res, next) => {
         } catch (error) {
             next({
                 status: 401,
-                message: 'Unauthorized',
-                type: error.message
+                message: 'Unauthorized'
             })
         }
     } else {
         next({
             status: 401,
-            message: 'Unauthorized',
-            type: 'Login first'
+            message: 'Unauthorized'
         })
     }
 }
