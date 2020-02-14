@@ -21,7 +21,8 @@ class Controller {
         Task.findAll({
             where: {
                 category_id: req.params.categoryId
-            }
+            },
+            order: [['id', 'ASC']]
         })
             .then(tasks => {
                 res.status(200).json(tasks)

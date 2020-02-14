@@ -1,4 +1,4 @@
-const { Category } = require('../models/index');
+const { Category, Task } = require('../models/index');
 
 class Controller {
     static insertData(req, res, next) {
@@ -19,10 +19,11 @@ class Controller {
             where: {
                 user_id: req.decoded.id
             },
+            include: [Task],
             order: [['id', 'ASC']]
         })
-            .then(categories => {
-                res.status(200).json(categories);
+            .then(response => {
+                res.status(200).json(response)
             })
             .catch(err => {
                 next(err)
@@ -73,6 +74,7 @@ class Controller {
             })
     }
     static delete(req, res, next) {
+        let deleted;
         Category.destroy({
             where: {
                 id: req.params.categoryId
@@ -80,9 +82,11 @@ class Controller {
         })
             .then(data => {
                 if (data) {
-                    res.status(200).json({
-                        data,
-                        message: 'Deleted'
+                    deleted = data
+                    return Task.destroy({
+                        where: {
+                            category_id: req.params.categoryId
+                        }
                     })
                 } else {
                     next({
@@ -90,6 +94,13 @@ class Controller {
                         message: 'Not found',
                     })
                 }
+            })
+            .then(tasks => {
+                res.status(200).json({
+                    category: deleted,
+                    tasks: tasks,
+                    message: 'Deleted'
+                })
             })
             .catch(err => {
                 next(err)

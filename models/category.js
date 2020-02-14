@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   class Category extends Model {
     static associate(models) {
       Category.hasMany(models.Task, {
-        foreignKey: 'id'
+        foreignKey: 'category_id'
       })
       Category.belongsTo(models.User, {
         foreignKey: 'user_id'
@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isInvalid(value, next) {
           if (value === null || value === '') {
-            next('Name is required');
+            next('*Name is required');
           } else {
             next();
           }

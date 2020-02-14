@@ -52,15 +52,13 @@ class Controller {
                     } else {
                         next({
                             status: 400,
-                            message: 'Bad request',
-                            type: 'Email / Password Wrong'
+                            message: 'Email / Password Wrong'
                         })
                     }
                 } else {
                     next({
                         status: 400,
-                        message: 'Bad request',
-                        type: 'Email / Password Wrong'
+                        message: 'Email / Password Wrong'
                     })
                 }
             })

@@ -12,7 +12,7 @@ const errorHandler = (err, req, res, next) => {
         status = 400;
         error = 'Invalid input';
     }
-    res.status(status).json(error)
+    res.status(status).json({ error })
 }
 
 module.exports = errorHandler;
