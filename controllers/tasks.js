@@ -100,6 +100,30 @@ class Controller {
                 next(err)
             })
     }
+    static editCategory(req, res, next) {
+        let update = {
+            category_id: req.body.category_id
+        };
+        Task.update(update, {
+            where: {
+                id: req.params.taskId
+            },
+            returning: true
+        })
+            .then(data => {
+                if (data[0]) {
+                    res.status(200).json(data)
+                } else {
+                    next({
+                        status: 404,
+                        message: 'Data not found'
+                    })
+                }
+            })
+            .catch(err => {
+                next(err)
+            })
+    }
 }
 
 module.exports = Controller;
