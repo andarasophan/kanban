@@ -4,6 +4,9 @@ const categoriesRouter = require('./categories')
 const tasksRouter = require('./tasks')
 const authentication = require('../middlewares/authentication')
 
+router.get('/', (req, res) => {
+  res.send('hello world');
+});
 router.use('/', userRouter);
 router.use(authentication);
 router.use('/categories', categoriesRouter)
