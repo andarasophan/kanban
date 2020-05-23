@@ -86,6 +86,28 @@ module.exports = (sequelize, DataTypes) => {
     hooks: {
       beforeCreate: (user, options) => {
         user.password = hashPass(user.password);
+      },
+      afterCreate: (user, options) => {
+        sequelize.transaction(function (t) {
+          let defaultValue = ['Things To Do', 'Doing', 'Done'];
+          let promises = [];
+          defaultValue.forEach(el => {
+            const promise = sequelize.models.Category.create({
+              name: el,
+              user_id: user.id
+            }, {
+              transaction: t
+            });
+            promises.push(promise);
+          });
+          return Promise.all(promises);
+        })
+          // .then((res) => {
+          //   console.log(res);
+          // })
+          // .catch((res) => {
+          //   console.log(res);
+          // });
       }
     },
     sequelize

@@ -19,11 +19,14 @@ class Controller {
             where: {
                 user_id: req.decoded.id
             },
+            order: [
+                ['id', 'ASC'],
+                [{ model: Task, as: 'Tasks' }, 'id', 'ASC']
+            ],
             include: [Task],
-            order: [['id', 'ASC']]
         })
             .then(response => {
-                res.status(200).json(response)
+                res.status(200).json({...req.decoded, kanban: response})
             })
             .catch(err => {
                 next(err)
