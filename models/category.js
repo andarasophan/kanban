@@ -37,7 +37,17 @@ module.exports = (sequelize, DataTypes) => {
           }
         }
       }
-    }
-  }, { sequelize })
+    },
+    color: {
+      type: DataTypes.STRING,
+    },
+  }, {
+    hooks: {
+      beforeCreate: (category, options) => {
+        category.color = 'white';
+      },
+    },
+    sequelize
+  })
   return Category;
 };

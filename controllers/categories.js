@@ -53,9 +53,7 @@ class Controller {
             })
     }
     static editData(req, res, next) {
-        let update = {
-            name: req.body.name
-        };
+        let update = req.body
         Category.update(update, {
             where: {
                 id: req.params.categoryId
