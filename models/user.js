@@ -81,11 +81,15 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Password minimal 4 characters'
         }
       }
-    }
+    },
+    background: {
+      type: DataTypes.STRING,
+    },
   }, {
     hooks: {
       beforeCreate: (user, options) => {
         user.password = hashPass(user.password);
+        user.background = 'default';
       },
       afterCreate: (user, options) => {
         sequelize.transaction(function (t) {
@@ -102,12 +106,6 @@ module.exports = (sequelize, DataTypes) => {
           });
           return Promise.all(promises);
         })
-          // .then((res) => {
-          //   console.log(res);
-          // })
-          // .catch((res) => {
-          //   console.log(res);
-          // });
       }
     },
     sequelize

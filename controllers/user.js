@@ -44,6 +44,7 @@ class Controller {
                             id: user.id,
                             email: user.email,
                             image: user.image,
+                            background: user.background,
                         }
                         let token = generateToken(payload);
                         res.status(200).json({
