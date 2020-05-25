@@ -5,7 +5,8 @@ const authentication = require('../middlewares/authentication');
 
 router.post('/register', Controller.register);
 router.post('/login', Controller.login);
-router.post('/login/google', Controller.loginGoogle);
-router.get('/user', authentication, CategoriesController.findAllById);
+router.get('/user', authentication, Controller.findUser);
+// router.get('/regenerate-token', Controller.regenerateToken);
+router.put('/user/edit', authentication, Controller.editUser);
 
 module.exports = router;

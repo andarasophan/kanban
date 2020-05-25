@@ -7,10 +7,10 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // associations can be defined here
       User.hasMany(models.Task, {
-        foreignKey: 'id'
+        foreignKey: 'user_id'
       })
       User.hasMany(models.Category, {
-        foreignKey: 'id'
+        foreignKey: 'user_id'
       })
     }
   }

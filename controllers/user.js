@@ -1,6 +1,6 @@
-const { User } = require('../models/index')
+const { User, Task, Category } = require('../models/index')
 const { comparePass } = require('../helpers/bcrypt')
-const { generateToken } = require('../helpers/jwt')
+const { generateToken, verifyToken } = require('../helpers/jwt')
 const { OAuth2Client } = require('google-auth-library');
 const secretPasswordGoogle = process.env.SECRET_GOOGLE
 
@@ -67,70 +67,106 @@ class Controller {
                 next(err)
             })
     }
-    static loginGoogle(req, res, next) {
-        let payload;
-        const client = new OAuth2Client("539169343052-ck6st9oeel1c00ope1scvr4bfk6nalt1.apps.googleusercontent.com");
-        client.verifyIdToken({
-            idToken: req.headers.access_token,
-            audience: "539169343052-ck6st9oeel1c00ope1scvr4bfk6nalt1.apps.googleusercontent.com",
+    // static regenerateToken(req, res, next) {
+    //     if (req.headers.token) {
+    //         try {
+    //             let decoded = verifyToken(req.headers.token);
+    //             User.findOne({
+    //                 where: {
+    //                     id: decoded.id
+    //                 }
+    //             })
+    //                 .then(user => {
+    //                     if (user) {
+    //                         let payload = {
+    //                             first_name: user.first_name,
+    //                             last_name: user.last_name,
+    //                             id: user.id,
+    //                             email: user.email,
+    //                             image: user.image,
+    //                             background: user.background,
+    //                         };
+    //                         let token = generateToken(payload);
+    //                         res.status(200).json({
+    //                             token: token
+    //                         })
+    //                     } else {
+    //                         next({
+    //                             status: 401,
+    //                             message: 'Unauthorized'
+    //                         })
+    //                     }
+    //                 })
+    //                 .catch(err => {
+    //                     next(err)
+    //                 })
+    //         } catch (error) {
+    //             next({
+    //                 status: 401,
+    //                 message: 'Unauthorized'
+    //             })
+    //         }
+    //     } else {
+    //         next({
+    //             status: 401,
+    //             message: 'Unauthorized'
+    //         })
+    //     }
+    // }
+    static findUser(req, res, next) {
+        User.findOne({
+            where: {
+                id: req.decoded.id,
+            },
+            order: [
+                ['id', 'ASC'],
+                [
+                    { model: Category, as: 'Categories' },
+                    'id', 'ASC'
+                ],
+                [
+                    { model: Category, as: 'Categories' },
+                    { model: Task, as: 'Tasks' },
+                    'id', 'ASC'
+                ]
+            ],
+            include: [{
+                model: Category,
+                include: [{
+                    model: Task,
+                }]
+            }],
         })
-            .then(response => {
-                payload = {
-                    first_name: response.payload.given_name,
-                    last_name: response.payload.family_name,
-                    email: response.payload.email,
-                    picture: response.payload.picture
-                }
-                return User.findOne({
-                    where: {
-                        email: response.payload.email
-                    }
-                })
+            .then((user) => {
+                res.status(200).json(user);
             })
-            .then(user => {
-                if (user) {
-                    let payload = {
-                        first_name: user.first_name,
-                        last_name: user.last_name,
-                        id: user.id,
-                        email: user.email,
-                        image: user.image,
-                    }
-                    let token = generateToken(payload);
-                    res.status(200).json({
-                        token: token
-                    })
+            .catch(err => {
+                next(err)
+            });
+    }
+    static editUser(req, res, next) {
+        let update = req.body;
+        User.update(update, {
+            where: {
+                id: req.decoded.id
+            },
+            returning: true
+        })
+            .then(data => {
+                if (data[0]) {
+                    res.status(200).json(data)
                 } else {
-                    let newUser = {
-                        first_name: payload.first_name,
-                        last_name: payload.last_name,
-                        email: payload.email,
-                        password: secretPasswordGoogle,
-                        image: payload.picture
-                    }
-                    User.create(newUser)
-                        .then(user => {
-                            let payload = {
-                                first_name: user.first_name,
-                                last_name: user.last_name,
-                                id: user.id,
-                                email: user.email,
-                                image: user.image,
-                            }
-                            let token = generateToken(payload);
-                            res.status(200).json({
-                                token: token
-                            })
-                        })
-                        .catch(err => {
-                            next(err);
-                        })
+                    next({
+                        status: 404,
+                        mesa: 'Data not found'
+                    })
                 }
             })
             .catch(err => {
                 next(err)
-            })
+            });
     }
+    static
 }
 
 module.exports = Controller;

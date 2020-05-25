@@ -26,7 +26,7 @@ class Controller {
             include: [Task],
         })
             .then(response => {
-                res.status(200).json({...req.decoded, kanban: response})
+                res.status(200).json(response)
             })
             .catch(err => {
                 next(err)
