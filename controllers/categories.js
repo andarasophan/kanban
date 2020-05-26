@@ -58,7 +58,8 @@ class Controller {
             where: {
                 id: req.params.categoryId
             },
-            returning: true
+            returning: true,
+            individualHooks: true,
         })
             .then(data => {
                 if (data[0]) {
@@ -79,7 +80,8 @@ class Controller {
         Category.destroy({
             where: {
                 id: req.params.categoryId
-            }
+            },
+            individualHooks: true,
         })
             .then(data => {
                 if (data) {

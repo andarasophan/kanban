@@ -91,14 +91,15 @@ module.exports = (sequelize, DataTypes) => {
         user.password = hashPass(user.password);
         user.background = 'default';
       },
-      afterCreate: (user, options) => {
-        sequelize.transaction(function (t) {
+      afterCreate: async (user, options) => {
+        await sequelize.transaction(function (t) {
           let defaultValue = ['Things To Do', 'Doing', 'Done'];
           let promises = [];
-          defaultValue.forEach(el => {
+          defaultValue.forEach((el, index) => {
             const promise = sequelize.models.Category.create({
               name: el,
-              user_id: user.id
+              user_id: user.id,
+              display_order: index + 1,
             }, {
               transaction: t
             });
