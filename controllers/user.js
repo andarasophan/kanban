@@ -122,7 +122,7 @@ class Controller {
                 ['id', 'ASC'],
                 [
                     { model: Category, as: 'Categories' },
-                    'id', 'ASC'
+                    'display_order', 'ASC'
                 ],
                 [
                     { model: Category, as: 'Categories' },
