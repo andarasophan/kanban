@@ -127,7 +127,7 @@ class Controller {
                 [
                     { model: Category, as: 'Categories' },
                     { model: Task, as: 'Tasks' },
-                    'id', 'ASC'
+                    'display_order', 'ASC'
                 ]
             ],
             include: [{

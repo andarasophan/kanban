@@ -1,4 +1,4 @@
-const { Task } = require('../models/index');
+const { Task, Category } = require('../models/index');
 
 class Controller {
     static insertData(req, res, next) {
@@ -25,6 +25,7 @@ class Controller {
             order: [['id', 'ASC']]
         })
             .then(tasks => {
+                console.log(tasks)
                 res.status(200).json(tasks)
             })
             .catch(err => {
@@ -52,16 +53,13 @@ class Controller {
             })
     }
     static editData(req, res, next) {
-        let update = {
-            title: req.body.title,
-            description: req.body.description,
-            due_date: req.body.due_date
-        };
+        let update = req.body;
         Task.update(update, {
             where: {
                 id: req.params.taskId
             },
-            returning: true
+            individualHooks: true,
+            returning: true,
         })
             .then(data => {
                 if (data[0]) {
@@ -100,19 +98,47 @@ class Controller {
                 next(err)
             })
     }
-    static editCategory(req, res, next) {
-        let update = {
-            category_id: req.body.category_id
-        };
-        Task.update(update, {
+    static editTaskCategoryId(req, res, next) {
+        Task.findAll({
             where: {
-                id: req.params.taskId
+                category_id: req.params.categoryId,
             },
-            returning: true
         })
+            .then((tasks) => {
+                const updateData = {
+                    display_order: tasks.length,
+                };
+                return Task.update(updateData, {
+                    where: {
+                        id: req.params.taskId,
+                    },
+                    individualHooks: true,
+                })                
+            })
+            .then(() => {
+                return Task.findAll({
+                    where: {
+                        category_id: req.body.category_id,
+                    },
+                })
+            })
+            .then((response) => {
+                
+                let update = {
+                    category_id: req.body.category_id,
+                    display_order: response.length + 1,
+                };
+                return Task.update(update, {
+                    where: {
+                        id: req.params.taskId
+                    },
+                    returning: true,
+                    individualHooks: true,
+                })
+            })
             .then(data => {
                 if (data[0]) {
-                    res.status(200).json(data)
+                    res.status(200).json(data);
                 } else {
                     next({
                         status: 404,

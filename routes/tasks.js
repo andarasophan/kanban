@@ -4,9 +4,9 @@ const { authorizationCategory, authorizationTask } = require('../middlewares/aut
 
 router.post('/:categoryId', authorizationCategory, tasksController.insertData)
 router.get('/:categoryId', authorizationCategory, tasksController.findAllByCategoryId)
-router.get('/:categoryId/:taskId', authorizationCategory, authorizationTask, tasksController.findOne)
-router.put('/:categoryId/:taskId', authorizationCategory, authorizationTask, tasksController.editData)
-router.put('/:categoryId/:taskId/updateCategory', authorizationCategory, authorizationTask, tasksController.editCategory)
-router.delete('/:categoryId/:taskId', authorizationCategory, authorizationTask, tasksController.deleteData)
+router.get('/:categoryId/:taskId', authorizationTask, tasksController.findOne)
+router.put('/:categoryId/:taskId', authorizationTask, tasksController.editData)
+router.put('/:categoryId/:taskId/updateCategory', authorizationTask, tasksController.editTaskCategoryId)
+router.delete('/:categoryId/:taskId', authorizationTask, tasksController.deleteData)
 
 module.exports = router;
