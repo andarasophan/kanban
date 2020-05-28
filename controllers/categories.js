@@ -62,14 +62,7 @@ class Controller {
             individualHooks: true,
         })
             .then(data => {
-                if (data[0]) {
-                    res.status(200).json(data)
-                } else {
-                    next({
-                        status: 404,
-                        mesa: 'Data not found'
-                    })
-                }
+                res.status(200).json(data)
             })
             .catch(err => {
                 next(err)
