@@ -94,6 +94,7 @@ module.exports = (sequelize, DataTypes) => {
             promises.push(sequelize.models.Category.update(updateData, {
               where: {
                 display_order: range > 0 ? category._previousDataValues.display_order + i + 1 : category._previousDataValues.display_order - i - 1,
+                user_id: category.user_id,
               },
             }));
           }
