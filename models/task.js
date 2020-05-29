@@ -45,9 +45,31 @@ module.exports = (sequelize, DataTypes) => {
             });
         }
       },
+      beforeDestroy: (task, options) => {
+        return sequelize.models.Task.findAll({
+          where: {
+            category_id: task.category_id,
+          },
+        })
+          .then((res) => {
+            if (res.length - task.display_order) {
+              let promises = [];
+              for (let i = 0; i < res.length - task.display_order; i++) {
+                let updateData = {
+                  display_order: task.display_order + i,
+                };
+                promises.push(sequelize.models.Task.update(updateData, {
+                  where: {
+                    display_order: task.display_order + i + 1,
+                  }
+                }));
+              }
+              return Promise.all(promises);
+            }
+          })
+      },
       beforeUpdate: (task, options) => {
         if (task.display_order !== task._previousDataValues.display_order && task.category_id === task._previousDataValues.category_id) {
-          console.log('masuk', task);
           const range = task.display_order - task._previousDataValues.display_order;
           const absRange = Math.abs(range);
           let promises = [];

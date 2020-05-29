@@ -25,7 +25,6 @@ class Controller {
             order: [['id', 'ASC']]
         })
             .then(tasks => {
-                console.log(tasks)
                 res.status(200).json(tasks)
             })
             .catch(err => {
@@ -72,7 +71,8 @@ class Controller {
         Task.destroy({
             where: {
                 id: req.params.taskId
-            }
+            },
+            individualHooks: true,
         })
             .then(data => {
                 if (data) {
