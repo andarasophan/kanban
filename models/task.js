@@ -61,6 +61,7 @@ module.exports = (sequelize, DataTypes) => {
                 promises.push(sequelize.models.Task.update(updateData, {
                   where: {
                     display_order: task.display_order + i + 1,
+                    category_id: task.category_id,
                   }
                 }));
               }
